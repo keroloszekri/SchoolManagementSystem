@@ -1,0 +1,64 @@
+﻿@model ArmyTech.Models.Student
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Student</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BirthDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Field.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Field.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Governorate.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Governorate.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Neighborhood.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Neighborhood.Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

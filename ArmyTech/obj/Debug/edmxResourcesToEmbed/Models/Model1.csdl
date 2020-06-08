@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ArmyTechTaskModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Field">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Students" Relationship="Self.FK_Student_Field" FromRole="Field" ToRole="Student" />
+  </EntityType>
+  <EntityType Name="Governorate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Neighborhoods" Relationship="Self.FK_Neighborhood_Governorate" FromRole="Governorate" ToRole="Neighborhood" />
+    <NavigationProperty Name="Students" Relationship="Self.FK_Student_Governorate" FromRole="Governorate" ToRole="Student" />
+  </EntityType>
+  <EntityType Name="Neighborhood">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="GovernorateId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Governorate" Relationship="Self.FK_Neighborhood_Governorate" FromRole="Neighborhood" ToRole="Governorate" />
+    <NavigationProperty Name="Students" Relationship="Self.FK_Student_Neighborhood" FromRole="Neighborhood" ToRole="Student" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="GovernorateId" Type="Int32" Nullable="false" />
+    <Property Name="NeighborhoodId" Type="Int32" />
+    <Property Name="FieldId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Field" Relationship="Self.FK_Student_Field" FromRole="Student" ToRole="Field" />
+    <NavigationProperty Name="Governorate" Relationship="Self.FK_Student_Governorate" FromRole="Student" ToRole="Governorate" />
+    <NavigationProperty Name="Neighborhood" Relationship="Self.FK_Student_Neighborhood" FromRole="Student" ToRole="Neighborhood" />
+    <NavigationProperty Name="StudentTeachers" Relationship="Self.FK_StudentTeacher_Student" FromRole="Student" ToRole="StudentTeacher" />
+  </EntityType>
+  <EntityType Name="StudentTeacher">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StudentId" Type="Int32" Nullable="false" />
+    <Property Name="TeacherId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Student" Relationship="Self.FK_StudentTeacher_Student" FromRole="StudentTeacher" ToRole="Student" />
+    <NavigationProperty Name="Teacher" Relationship="Self.FK_StudentTeacher_Teacher" FromRole="StudentTeacher" ToRole="Teacher" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Teacher">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BirthDate" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="StudentTeachers" Relationship="Self.FK_StudentTeacher_Teacher" FromRole="Teacher" ToRole="StudentTeacher" />
+  </EntityType>
+  <Association Name="FK_Student_Field">
+    <End Role="Field" Type="Self.Field" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Field">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Neighborhood_Governorate">
+    <End Role="Governorate" Type="Self.Governorate" Multiplicity="1" />
+    <End Role="Neighborhood" Type="Self.Neighborhood" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Governorate">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Neighborhood">
+        <PropertyRef Name="GovernorateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Governorate">
+    <End Role="Governorate" Type="Self.Governorate" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Governorate">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="GovernorateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Neighborhood">
+    <End Role="Neighborhood" Type="Self.Neighborhood" Multiplicity="0..1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Neighborhood">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="NeighborhoodId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentTeacher_Student">
+    <End Role="Student" Type="Self.Student" Multiplicity="1" />
+    <End Role="StudentTeacher" Type="Self.StudentTeacher" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentTeacher">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentTeacher_Teacher">
+    <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+    <End Role="StudentTeacher" Type="Self.StudentTeacher" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Teacher">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentTeacher">
+        <PropertyRef Name="TeacherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ArmyTechTaskEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Fields" EntityType="Self.Field" />
+    <EntitySet Name="Governorates" EntityType="Self.Governorate" />
+    <EntitySet Name="Neighborhoods" EntityType="Self.Neighborhood" />
+    <EntitySet Name="Students" EntityType="Self.Student" />
+    <EntitySet Name="StudentTeachers" EntityType="Self.StudentTeacher" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Teachers" EntityType="Self.Teacher" />
+    <AssociationSet Name="FK_Student_Field" Association="Self.FK_Student_Field">
+      <End Role="Field" EntitySet="Fields" />
+      <End Role="Student" EntitySet="Students" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Neighborhood_Governorate" Association="Self.FK_Neighborhood_Governorate">
+      <End Role="Governorate" EntitySet="Governorates" />
+      <End Role="Neighborhood" EntitySet="Neighborhoods" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Governorate" Association="Self.FK_Student_Governorate">
+      <End Role="Governorate" EntitySet="Governorates" />
+      <End Role="Student" EntitySet="Students" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Neighborhood" Association="Self.FK_Student_Neighborhood">
+      <End Role="Neighborhood" EntitySet="Neighborhoods" />
+      <End Role="Student" EntitySet="Students" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentTeacher_Student" Association="Self.FK_StudentTeacher_Student">
+      <End Role="Student" EntitySet="Students" />
+      <End Role="StudentTeacher" EntitySet="StudentTeachers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentTeacher_Teacher" Association="Self.FK_StudentTeacher_Teacher">
+      <End Role="Teacher" EntitySet="Teachers" />
+      <End Role="StudentTeacher" EntitySet="StudentTeachers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

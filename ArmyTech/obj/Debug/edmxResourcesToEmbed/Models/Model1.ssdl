@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ArmyTechTaskModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Field">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Governorate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Neighborhood">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="GovernorateId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BirthDate" Type="date" Nullable="false" />
+    <Property Name="GovernorateId" Type="int" Nullable="false" />
+    <Property Name="NeighborhoodId" Type="int" />
+    <Property Name="FieldId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudentTeacher">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StudentId" Type="int" Nullable="false" />
+    <Property Name="TeacherId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Teacher">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="BirthDate" Type="date" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Neighborhood_Governorate">
+    <End Role="Governorate" Type="Self.Governorate" Multiplicity="1" />
+    <End Role="Neighborhood" Type="Self.Neighborhood" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Governorate">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Neighborhood">
+        <PropertyRef Name="GovernorateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Field">
+    <End Role="Field" Type="Self.Field" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Field">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="FieldId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Governorate">
+    <End Role="Governorate" Type="Self.Governorate" Multiplicity="1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Governorate">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="GovernorateId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Student_Neighborhood">
+    <End Role="Neighborhood" Type="Self.Neighborhood" Multiplicity="0..1" />
+    <End Role="Student" Type="Self.Student" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Neighborhood">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Student">
+        <PropertyRef Name="NeighborhoodId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentTeacher_Student">
+    <End Role="Student" Type="Self.Student" Multiplicity="1" />
+    <End Role="StudentTeacher" Type="Self.StudentTeacher" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentTeacher">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StudentTeacher_Teacher">
+    <End Role="Teacher" Type="Self.Teacher" Multiplicity="1" />
+    <End Role="StudentTeacher" Type="Self.StudentTeacher" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Teacher">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="StudentTeacher">
+        <PropertyRef Name="TeacherId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ArmyTechTaskModelStoreContainer">
+    <EntitySet Name="Field" EntityType="Self.Field" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Governorate" EntityType="Self.Governorate" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Neighborhood" EntityType="Self.Neighborhood" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudentTeacher" EntityType="Self.StudentTeacher" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Teacher" EntityType="Self.Teacher" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Neighborhood_Governorate" Association="Self.FK_Neighborhood_Governorate">
+      <End Role="Governorate" EntitySet="Governorate" />
+      <End Role="Neighborhood" EntitySet="Neighborhood" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Field" Association="Self.FK_Student_Field">
+      <End Role="Field" EntitySet="Field" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Governorate" Association="Self.FK_Student_Governorate">
+      <End Role="Governorate" EntitySet="Governorate" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Student_Neighborhood" Association="Self.FK_Student_Neighborhood">
+      <End Role="Neighborhood" EntitySet="Neighborhood" />
+      <End Role="Student" EntitySet="Student" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentTeacher_Student" Association="Self.FK_StudentTeacher_Student">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="StudentTeacher" EntitySet="StudentTeacher" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StudentTeacher_Teacher" Association="Self.FK_StudentTeacher_Teacher">
+      <End Role="Teacher" EntitySet="Teacher" />
+      <End Role="StudentTeacher" EntitySet="StudentTeacher" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
